@@ -1,17 +1,9 @@
 import datetime
 import os
 import pandas
-import metapy
-
-
-# Implementations:
-# Initial data study
-# Remove the row which does not have comment
-# Categorize the given rating as 'positive' if 4 or 5, 'neutral' if 3, else 'negative'
-# Save revised content in new csv file
+import matplotlib.pyplot as plt
 
 st_time = datetime.datetime.now()
-metapy.log_to_stderr()
 base_resource_path = os.path.join(os.path.abspath(os.path.join(os.path.abspath(os.path.dirname(__file__)), os.pardir)),
                                   'resources')
 original_file = 'WomensClothing-E-Commerce-Reviews.csv'
@@ -25,10 +17,15 @@ dataset = dataset[dataset['Review Text'].notnull()]  # Drop the row which does n
 print('Shape of the data set:', dataset.shape)
 print(dataset.describe())
 print(dataset.groupby('Rating').size())
+dataset.groupby('Rating').size().plot(kind='bar', colormap='Purples_r').set_ylabel('Count')
+plt.show()
 
 dataset['sentiments key'] = dataset['Rating'].apply(
     lambda x: 'Positive' if (4 <= int(x) <= 5) else ('Neutral' if int(x) == 3 else 'Negative'))
 dataset.to_csv(path_or_buf=base_resource_path + '/' + revised_file, index=False)
+
+dataset.groupby('sentiments key').size().plot(kind='bar', colormap='copper_r').set_ylabel('Count')
+plt.show()
 
 print('That will be it!!')
 en_time = datetime.datetime.now()

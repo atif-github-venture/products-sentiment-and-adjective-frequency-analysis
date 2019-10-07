@@ -3,23 +3,18 @@ import os
 import nltk
 import pandas
 import metapy
-
-
-# Implementations:
-# Read the data file
-# Extract review text for colleciton generation
-# Join each review, tokenize, lowercase, filer (stopwords.txt), stem and finally apply
-# Use nltk to generate word frequency
-# Save the file as 'collection.txt'
+import matplotlib.pyplot as plt
 
 
 def build_collection(doc):
     tok = metapy.analyzers.ICUTokenizer(suppress_tags=True)
     tok = metapy.analyzers.LowercaseFilter(tok)
-    tok = metapy.analyzers.ListFilter(tok, base_resource_path + '/stopwords.txt', metapy.analyzers.ListFilter.Type.Reject)
+    tok = metapy.analyzers.ListFilter(tok, base_resource_path + '/stopwords.txt',
+                                      metapy.analyzers.ListFilter.Type.Reject)
     tok = metapy.analyzers.Porter2Filter(tok)
     tok.set_content(doc.content())
     return tok
+
 
 st_time = datetime.datetime.now()
 metapy.log_to_stderr()
@@ -48,6 +43,15 @@ with open(base_resource_path + '/' + collection_file, 'w') as fp:
     for word, frequency in all_words.most_common():
         fp.write(u'{},{}\n'.format(word, frequency))
 fp.close()
+
+df = pandas.DataFrame(all_words.most_common())
+df.columns = ['Word', 'Freq']
+print('*********')
+print(df)
+ax = df.plot(legend=True, title='Word frequency distribution')
+ax.set_xlabel('Words', fontsize=12)
+ax.set_ylabel('Frequency', fontsize=12)
+plt.show()
 
 print('That will be it!!')
 en_time = datetime.datetime.now()
