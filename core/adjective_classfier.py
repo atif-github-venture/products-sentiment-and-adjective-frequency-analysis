@@ -53,6 +53,8 @@ dataset = pandas.read_csv(base_resource_path + '/' + revised_file, names=names)
 
 dataset["sentiments key"] = dataset["sentiments key"].replace('Neutral', 'Negative')
 
+# dataset = dataset.sample(frac=1)
+
 X = dataset['Review Text']
 
 texts_transformed = []
@@ -97,15 +99,16 @@ def classifier(adjective):
     return model.predict(cv.transform([adjective]))
 
 
-# print(classifier('great'))
-# print(classifier('less'))
-# print(classifier('short'))
+print(classifier('great'))
+print(classifier('less'))
+print(classifier('short'))
+print(classifier('bad'))
 
 # TODO https://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/
 
-with open(base_resource_path + '/' + agg_adj_freq_file) as json_file:
-    data = json.load(json_file)
-    for item in extract_list_adject_to_classify(data):
-        print(item + ': ->')
-        print(classifier(item))
-        print('\n')
+# with open(base_resource_path + '/' + agg_adj_freq_file) as json_file:
+#     data = json.load(json_file)
+#     for item in extract_list_adject_to_classify(data):
+#         print(item + ': ->')
+#         print(classifier(item))
+#         print('\n')
