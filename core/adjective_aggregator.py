@@ -2,10 +2,10 @@ import datetime
 import os
 import pandas
 import nltk
-import metapy
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import PorterStemmer
+
 
 def filter_stopwords(text):
     ps = PorterStemmer()
@@ -24,6 +24,7 @@ def extract_adjectives(r_text):
     words_tagged = nltk.pos_tag(words)
     adj_add = [adjectives.append(word_tagged[0]) for word_tagged in words_tagged if word_tagged[1] == "JJ"]
     return adjectives
+
 
 st_time = datetime.datetime.now()
 base_resource_path = os.path.join(os.path.abspath(os.path.join(os.path.abspath(os.path.dirname(__file__)), os.pardir)),
