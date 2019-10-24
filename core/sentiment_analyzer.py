@@ -27,7 +27,6 @@ def process_review(doc):
 
 
 st_time = datetime.datetime.now()
-metapy.log_to_stderr()
 base_resource_path = os.path.join(os.path.abspath(os.path.join(os.path.abspath(os.path.dirname(__file__)), os.pardir)),
                                   'resources')
 revised_file = 'WomensClothing-E-Commerce-Reviews-revised.csv'

@@ -22,15 +22,25 @@ def filter_stopwords(text):
     return filtered_sentence
 
 
-st_time = datetime.datetime.now()
+def filter_custom_stop_words(words):
+    stop_words = ['i', '-', 'it', 'the', 'a', 'an', 's', 't', 'm', 'd', 'xl', 'xs', 'other']
+    filtered_words = []
+    for w in words:
+        if w.lower() not in stop_words:
+            filtered_words.append(w)
+    return filtered_words
+
+
 base_resource_path = os.path.join(os.path.abspath(os.path.join(os.path.abspath(os.path.dirname(__file__)), os.pardir)),
                                   'resources')
 revised_file = 'WomensClothing-E-Commerce-Reviews-revised.csv'
-collection_file = 'collection.txt'
 
 names = ['sino', 'Clothing ID', 'Age', 'Title', 'Review Text', 'Rating', 'Recommended IND', 'Positive Feedback Count',
          'Division Name', 'Department Name', 'Class Name', 'sentiments key']
-dataset = pandas.read_csv(base_resource_path + '/' + revised_file, nrows=5000, names=names)
+# dataset = pandas.read_csv(base_resource_path + '/' + revised_file, nrows=5000, names=names)
+dataset = pandas.read_csv(base_resource_path + '/' + revised_file, names=names)
+
+dataset["sentiments key"] = dataset["sentiments key"].replace('Neutral', 'Negative')
 
 X = dataset['Review Text']
 
@@ -40,9 +50,11 @@ for review in X:
     adjectives = []
 
     for sentence in sentences:
-        words = nltk.word_tokenize(filter_stopwords(sentence))
+        words = nltk.word_tokenize(sentence.lower())
+        words = filter_custom_stop_words(words)
         words_tagged = nltk.pos_tag(words)
-        adj_add = [adjectives.append(word_tagged[0]) for word_tagged in words_tagged if word_tagged[1] == "JJ"]
+        adj_add = [adjectives.append(word_tagged[0]) for word_tagged in words_tagged if
+                   word_tagged[1] == "JJ" or word_tagged[1] == "JJR" or word_tagged[1] == "JJS"]
 
     texts_transformed.append(" ".join(adjectives))
 
@@ -75,9 +87,5 @@ def classifier(adjective):
 
 
 print(classifier('great'))
-print(classifier('bad'))
-
-adj = list(zip(model.coef_[0], cv.get_feature_names()))
-adj = sorted(adj, reverse=True)
-for a in adj:
-    print(a)
+print(classifier('less'))
+print(classifier('short'))
