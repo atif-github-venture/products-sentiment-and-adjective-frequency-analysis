@@ -1,4 +1,3 @@
-import datetime
 import os
 import pandas
 import nltk
@@ -9,6 +8,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import confusion_matrix
+import json
 
 
 def filter_stopwords(text):
@@ -31,9 +31,20 @@ def filter_custom_stop_words(words):
     return filtered_words
 
 
+def extract_list_adject_to_classify(data):
+    list = []
+    for item_list in data:
+        for key, val in item_list.items():
+            for x in val:
+                for k, v in x.items():
+                    list.append(k)
+    return list
+
+
 base_resource_path = os.path.join(os.path.abspath(os.path.join(os.path.abspath(os.path.dirname(__file__)), os.pardir)),
                                   'resources')
 revised_file = 'WomensClothing-E-Commerce-Reviews-revised.csv'
+agg_adj_freq_file = 'aggregated_adjective_per_product_freq.json'
 
 names = ['sino', 'Clothing ID', 'Age', 'Title', 'Review Text', 'Rating', 'Recommended IND', 'Positive Feedback Count',
          'Division Name', 'Department Name', 'Class Name', 'sentiments key']
@@ -86,6 +97,15 @@ def classifier(adjective):
     return model.predict(cv.transform([adjective]))
 
 
-print(classifier('great'))
-print(classifier('less'))
-print(classifier('short'))
+# print(classifier('great'))
+# print(classifier('less'))
+# print(classifier('short'))
+
+# TODO https://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/
+
+with open(base_resource_path + '/' + agg_adj_freq_file) as json_file:
+    data = json.load(json_file)
+    for item in extract_list_adject_to_classify(data):
+        print(item + ': ->')
+        print(classifier(item))
+        print('\n')
