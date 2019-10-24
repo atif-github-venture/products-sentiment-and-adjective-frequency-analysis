@@ -48,8 +48,8 @@ agg_adj_freq_file = 'aggregated_adjective_per_product_freq.json'
 
 names = ['sino', 'Clothing ID', 'Age', 'Title', 'Review Text', 'Rating', 'Recommended IND', 'Positive Feedback Count',
          'Division Name', 'Department Name', 'Class Name', 'sentiments key']
-# dataset = pandas.read_csv(base_resource_path + '/' + revised_file, nrows=5000, names=names)
-dataset = pandas.read_csv(base_resource_path + '/' + revised_file, names=names)
+dataset = pandas.read_csv(base_resource_path + '/' + revised_file, nrows=15000, names=names)
+# dataset = pandas.read_csv(base_resource_path + '/' + revised_file, names=names)
 
 dataset["sentiments key"] = dataset["sentiments key"].replace('Neutral', 'Negative')
 
@@ -76,7 +76,8 @@ y = dataset["sentiments key"]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
 
-cv = CountVectorizer(max_features=50)
+cv = CountVectorizer()
+# cv = CountVectorizer(max_features=500)
 cv.fit(X_train)
 
 X_train = cv.transform(X_train)
@@ -106,9 +107,9 @@ print(classifier('bad'))
 
 # TODO https://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/
 
-# with open(base_resource_path + '/' + agg_adj_freq_file) as json_file:
-#     data = json.load(json_file)
-#     for item in extract_list_adject_to_classify(data):
-#         print(item + ': ->')
-#         print(classifier(item))
-#         print('\n')
+with open(base_resource_path + '/' + agg_adj_freq_file) as json_file:
+    data = json.load(json_file)
+    for item in extract_list_adject_to_classify(data):
+        print(item + ': ->')
+        print(classifier(item))
+        print('\n')
