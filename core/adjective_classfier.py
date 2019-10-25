@@ -1,3 +1,4 @@
+import datetime
 import os
 import pandas
 import nltk
@@ -51,12 +52,15 @@ def classify_adjective_from_aggr(data):
             list.append(dict({key:list_dict}))
     return list
 
-
+st_time = datetime.datetime.now()
 base_resource_path = os.path.join(os.path.abspath(os.path.join(os.path.abspath(os.path.dirname(__file__)), os.pardir)),
                                   'resources')
 revised_file = 'WomensClothing-E-Commerce-Reviews-revised.csv'
 agg_adj_freq_file = 'aggregated_adjective_per_product_freq.json'
 class_agg_adj_freq_file = 'classified_aggregated_adjective_per_product_freq.json'
+agg_adj_freq_collection_file = 'aggregated_adjective_freq_collection.txt'
+agg_adj_freq_collection_file_classified = 'aggregated_adjective_freq_collection_classified.csv'
+top_5_pos_neg_adj = 'top_5_pos_neg_adj.csv'
 
 names = ['sino', 'Clothing ID', 'Age', 'Title', 'Review Text', 'Rating', 'Recommended IND', 'Positive Feedback Count',
          'Division Name', 'Department Name', 'Class Name', 'sentiments key']
@@ -136,3 +140,34 @@ with open(base_resource_path + '/' + class_agg_adj_freq_file, 'w') as fp:
     # for item in per_product_freq_dist:
     json.dump(classified_list, fp)
 fp.close()
+
+# categorize the collection adjectives for positive/negative
+names = ['word', 'frequency']
+# dataset = pandas.read_csv(base_resource_path + '/' + revised_file, nrows=500, names=names)
+dataset = pandas.read_csv(base_resource_path + '/' + agg_adj_freq_collection_file, names=names)
+
+with open(base_resource_path + '/' + agg_adj_freq_collection_file_classified, 'w') as fp:
+    for ind, row in dataset.iterrows():
+        word = row['word']
+        freq = row['frequency']
+        classification = classifier(word)[0]
+        fp.write(u'{},{},{}\n'.format(word, freq, classification))
+fp.close()
+
+# top 5 positive/negative adjectives in entire collection
+names = ['word', 'frequency', 'class']
+dataset = pandas.read_csv(base_resource_path + '/' + agg_adj_freq_collection_file_classified, names=names)
+
+df_p = dataset.where(dataset['class'] == 'Positive').head(5)
+df_n = dataset.where(dataset['class'] == 'Negative')
+df_n = df_n.dropna(subset=['class']).head(5)
+
+with open(base_resource_path + '/' + top_5_pos_neg_adj, 'w') as fp:
+    for ind, row in df_p.iterrows():
+        fp.write(u'{},{},{}\n'.format(row['word'], row['frequency'], row['class']))
+    for ind, row in df_n.iterrows():
+        fp.write(u'{},{},{}\n'.format(row['word'], row['frequency'], row['class']))
+fp.close()
+
+en_time = datetime.datetime.now()
+print('Total execution time (milliseconds): ' + str((en_time - st_time).total_seconds() * 1000))

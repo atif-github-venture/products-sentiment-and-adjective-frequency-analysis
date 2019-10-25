@@ -49,22 +49,31 @@ base_resource_path = os.path.join(os.path.abspath(os.path.join(os.path.abspath(o
 agg_file = 'aggregated_comment_per_product.csv'
 agg_adj_file = 'aggregated_adjective_per_product.csv'
 agg_adj_freq_file = 'aggregated_adjective_per_product_freq.json'
+agg_adj_freq_collection_file = 'aggregated_adjective_freq_collection.txt'
 
 names = ['Clothing ID', 'Review Text']
 dataset = pandas.read_csv(base_resource_path + '/' + agg_file, names=names)
 
+all_adj = []
 processed_sentence = []
 per_product_freq_dist = []
 for ind, row in dataset.iterrows():
     c_id = row['Clothing ID']
     r_text = row['Review Text']
     extracted_adj_list = extract_adjectives(r_text)
+    all_adj = all_adj + extracted_adj_list
     all_words = nltk.FreqDist(extracted_adj_list)
     feq_dis = []
     for word, frequency in all_words.most_common():
         feq_dis.append(dict({word: frequency}))
     per_product_freq_dist.append(dict({c_id: feq_dis}))
     processed_sentence.append(u'{},{}\n'.format(c_id, extracted_adj_list))
+
+
+with open(base_resource_path + '/' + agg_adj_freq_collection_file, 'w') as fp:
+    for word, freq in nltk.FreqDist(all_adj).most_common():
+        fp.write(u'{},{}\n'.format(word, freq))
+fp.close()
 
 with open(base_resource_path + '/' + agg_adj_file, 'w') as fp:
     for item in processed_sentence:
