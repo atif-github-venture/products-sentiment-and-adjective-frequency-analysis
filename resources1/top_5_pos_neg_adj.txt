@@ -1,0 +1,10 @@
+great,6104.0,Positive
+small,4565.0,Positive
+top,4063.0,Positive
+soft,3275.0,Positive
+little,3189.0,Positive
+huge,541.0,Negative
+disappointed,398.0,Negative
+bad,389.0,Negative
+cheap,275.0,Negative
+excited,239.0,Negative
