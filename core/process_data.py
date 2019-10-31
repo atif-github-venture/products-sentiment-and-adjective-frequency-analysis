@@ -2,8 +2,8 @@ import datetime
 import nltk
 import pandas
 import matplotlib.pyplot as plt
-from core import utils
-from core.constants import Constants
+import utils
+from constants import Constants
 import metapy
 
 
@@ -13,6 +13,7 @@ class ProcessData:
     revised_file_adj = Constants.REVISED_FILE_NAME_ADJ
     collection_file = Constants.COLLECTION_FILE
     agg_comment_per_prod_file = Constants.AGGREGATE_COMMENT_FILE
+    stop_word_file = Constants.STOP_WORD_FILE
     dataset = None
 
     def __init__(self, picn, hc, recn, rcn):
@@ -31,7 +32,7 @@ class ProcessData:
         product_ids = []
         for i, row in self.dataset.iterrows():
             product_ids.append(row[self.product_id_col_name])
-        c_id = list(set(product_ids)) for i, row in self.dataset.iterrows()
+        c_id = list(set(product_ids))
 
         aggregated_reviews = []
         for id in c_id:
@@ -66,7 +67,7 @@ class ProcessData:
 
         doc = metapy.index.Document()
         doc.content(complete_set)
-        tokens = utils.build_collection(doc, self.base_resource_path, 'stopwords.txt')
+        tokens = utils.build_collection(doc, self.base_resource_path, self.stop_word_file)
 
         all_words = nltk.FreqDist(tokens)
         str = ''
