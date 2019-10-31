@@ -7,7 +7,7 @@ from core.constants import Constants
 import metapy
 
 
-class PreProcessing:
+class ProcessData:
     base_resource_path = Constants.RESOURCE_PATH
     revised_file_sent = Constants.REVISED_FILE_NAME_SENT
     revised_file_adj = Constants.REVISED_FILE_NAME_ADJ
@@ -118,7 +118,7 @@ if __name__ == '__main__':
     review_col_name = 'Review Text'
     rating_col_name = 'Rating'
     product_id_col_name = 'Clothing ID'
-    pp = PreProcessing(product_id_col_name, header_columns, review_col_name, rating_col_name)
+    pp = ProcessData(product_id_col_name, header_columns, review_col_name, rating_col_name)
     pp.process_input_data()
     pp.generate_collection_corpus()
     pp.aggregate_reviews_per_product()
