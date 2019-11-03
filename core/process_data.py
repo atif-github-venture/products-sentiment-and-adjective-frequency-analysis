@@ -19,13 +19,14 @@ class ProcessData:
     adj_frequency_file = Constants.ADJECTIVE_FREQUENCY_FILE
     adjectives_per_product_file = Constants.ADJECTIVE_PER_PRODUCT_FILE
     adjectives_freq_dist_per_product_file = Constants.ADJECTIVE_FREQ_DISTRO_PER_PRODUCT_FILE
-    dataset = None
 
-    def __init__(self, picn, hc, recn, rcn):
+    def __init__(self, picn, hc, recn, rcn, scn):
         self.product_id_col_name = picn
         self.header_columns = hc
         self.review_col_name = recn
         self.rating_col_name = rcn
+        self.sentiment_col_name = scn
+        self.dataset = None
 
     def aggregate_reviews_per_product(self):
         '''
@@ -134,15 +135,15 @@ class ProcessData:
         utils.show_plots(self.dataset, 'Purples_r', self.rating_col_name)
 
         # Sentiment Analysis
-        self.dataset['sentiments key'] = self.dataset[self.rating_col_name].apply(
+        self.dataset[self.sentiment_col_name] = self.dataset[self.rating_col_name].apply(
             lambda x: 'Positive' if (4 <= int(x) <= 5) else ('Neutral' if int(x) == 3 else 'Negative'))
         utils.save_dataset_to_csv(self.dataset, self.output_path, self.revised_file_sent)
-        utils.show_plots(self.dataset, 'copper_r', 'sentiments key')
+        utils.show_plots(self.dataset, 'copper_r', self.sentiment_col_name)
 
         # Adjective classification
-        self.dataset["sentiments key"] = self.dataset["sentiments key"].replace('Neutral', 'Negative')
+        self.dataset[self.sentiment_col_name] = self.dataset[self.sentiment_col_name].replace('Neutral', 'Negative')
         utils.save_dataset_to_csv(self.dataset, self.output_path, self.revised_file_adj)
-        utils.show_plots(self.dataset, 'Greens_r', 'sentiments key')
+        utils.show_plots(self.dataset, 'Greens_r', self.sentiment_col_name)
 
 
 if __name__ == '__main__':
@@ -152,7 +153,8 @@ if __name__ == '__main__':
     review_col_name = 'Review Text'
     rating_col_name = 'Rating'
     product_id_col_name = 'Clothing ID'
-    pp = ProcessData(product_id_col_name, header_columns, review_col_name, rating_col_name)
+    sentiment_col_name = 'Sentiments key'
+    pp = ProcessData(product_id_col_name, header_columns, review_col_name, rating_col_name, sentiment_col_name)
     pp.process_input_data()
     pp.generate_collection_corpus()
     pp.aggregate_reviews_per_product()
