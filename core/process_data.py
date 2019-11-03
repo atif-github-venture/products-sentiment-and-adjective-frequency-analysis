@@ -145,6 +145,31 @@ class ProcessData:
         utils.save_dataset_to_csv(self.dataset, self.output_path, self.revised_file_adj)
         utils.show_plots(self.dataset, 'Greens_r', self.sentiment_col_name)
 
+    def balance_original_data(self):
+        '''
+        This is reducing the precision of by ~7% for the chosen data set.
+        Read the file for sentiment and adjective inputs and balance the number of data equally based on sentiments.
+        Overwrite the input files
+        :return: None
+        '''
+        dataset = pandas.read_csv(self.output_path + '/' + self.revised_file_adj, names=self.header_columns)
+        # f_p = dataset.where(dataset[self.sentiment_col_name] == 'Positive').head(self.top)
+        f_p = dataset.where(dataset[self.sentiment_col_name] == 'Positive')
+        f_p = f_p[f_p[self.sentiment_col_name].notnull()]
+        df_n = dataset.where(dataset[self.sentiment_col_name] == 'Negative')
+        df_n = df_n[df_n[self.sentiment_col_name].notnull()]
+        each_data_count = min(len(df_n), len(f_p))
+        f_p = dataset.where(dataset[self.sentiment_col_name] == 'Positive')
+        f_p = f_p[f_p[self.sentiment_col_name].notnull()]
+        f_p = f_p.head(each_data_count)
+
+        df_n = dataset.where(dataset[self.sentiment_col_name] == 'Negative')
+        df_n = df_n.dropna(subset=[self.sentiment_col_name]).head(each_data_count)
+        frames = [df_n, f_p]
+        mix = pandas.concat(frames)
+        mix = mix.sample(frac=1)
+        utils.save_dataset_to_csv(mix, self.output_path, self.revised_file_adj)
+
 
 if __name__ == '__main__':
     st_time = datetime.datetime.now()
@@ -156,6 +181,9 @@ if __name__ == '__main__':
     sentiment_col_name = 'Sentiments key'
     pp = ProcessData(product_id_col_name, header_columns, review_col_name, rating_col_name, sentiment_col_name)
     pp.process_input_data()
+    # pp.header_columns = ['sino', 'Clothing ID', 'Age', 'Title', 'Review Text', 'Rating', 'Recommended IND',
+    #                     'Positive Feedback Count', 'Division Name', 'Department Name', 'Class Name', 'Sentiments key']
+    # pp.balance_original_data()
     pp.generate_collection_corpus()
     pp.aggregate_reviews_per_product()
 

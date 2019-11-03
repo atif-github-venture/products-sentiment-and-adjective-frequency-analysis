@@ -5,8 +5,6 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import confusion_matrix, accuracy_score
-import json
-
 from resources.constants import Constants
 
 
@@ -71,7 +69,7 @@ class AdjectiveClassifier:
         X = texts_transformed
         y = dataset[self.sentiment_col_name]
 
-        X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=1)
 
         self.cv = CountVectorizer()
         # cv = CountVectorizer(max_features=500)
@@ -157,7 +155,7 @@ if __name__ == '__main__':
     ac.adjective_classification()
     ac.classify_adjectives_per_product()
     ac.header_columns = ['word', 'frequency']
-    ac.top = 10
+    ac.top = 5
     ac.classify_adjectives_collection()
     # TODO https://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/
 

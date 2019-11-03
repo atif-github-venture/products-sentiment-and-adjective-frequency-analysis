@@ -105,7 +105,7 @@ if __name__ == '__main__':
     sa = SentimentAnalyzer(header_columns, review_col_name, sent_key_col_name)
     sa.set_data()
     sa.train_naive_bayes_classifier()
-    sa.run_test() #To run a test for above classifier uncomment below lines of code.
+    sa.run_test()
 
     en_time = datetime.datetime.now()
     print('Total execution time (milliseconds): ' + str((en_time - st_time).total_seconds() * 1000))
