@@ -1,5 +1,6 @@
 import os
 
+
 class Constants:
     FILE_NAME = 'WomensClothing-E-Commerce-Reviews.csv'
     REVISED_FILE_NAME_SENT = 'revised_for_sentiment.csv'
@@ -9,7 +10,11 @@ class Constants:
     ADJECTIVE_FREQUENCY_FILE = 'adjective_frequency.csv'
     ADJECTIVE_PER_PRODUCT_FILE = 'adjective_per_product.txt'
     ADJECTIVE_FREQ_DISTRO_PER_PRODUCT_FILE = 'adjective_freq_distro_per_product.json'
-    SENT_TEST_FILE = 'test.csv'
+    SENT_TEST_FILE = 'sentiment_test_input.csv'
     STOP_WORD_FILE = 'stopwords.txt'
-    RESOURCE_PATH = base_resource_path = os.path.join(os.path.abspath(os.path.join(os.path.abspath(os.path.dirname(__file__)), os.pardir)),
-                                                      'resources')
+    RESOURCE_PATH = os.path.join(
+        os.path.abspath(os.path.join(os.path.abspath(os.path.dirname(__file__)), os.pardir)),
+        'resources')
+    OUTPUT_PATH = os.path.join(
+        os.path.abspath(os.path.join(os.path.abspath(os.path.dirname(__file__)), os.pardir)),
+        'output')

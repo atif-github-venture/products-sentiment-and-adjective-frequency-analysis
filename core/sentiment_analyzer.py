@@ -4,13 +4,14 @@ import nltk
 import metapy
 import pandas
 from nltk.metrics import precision, recall, f_measure
-from core import utils
-from core.constants import Constants
+from resources import utils
+from resources.constants import Constants
 
 
 class SentimentAnalyzer:
     word_features = None
     base_resource_path = Constants.RESOURCE_PATH
+    output_path = Constants.OUTPUT_PATH
     collection_file = Constants.COLLECTION_FILE
     test_file = Constants.SENT_TEST_FILE
     revised_file = Constants.REVISED_FILE_NAME_SENT
@@ -39,10 +40,10 @@ class SentimentAnalyzer:
     def set_data(self):
         # Define the feature extractor
         names = ['word', 'freq']
-        collection = pandas.read_csv(self.base_resource_path + '/' + self.collection_file, names=names)
+        collection = pandas.read_csv(self.output_path + '/' + self.collection_file, names=names)
         self.word_features = list(collection['word'])[:2000]
 
-        dataset = pandas.read_csv(self.base_resource_path + '/' + self.revised_file, names=self.header_columns)
+        dataset = pandas.read_csv(self.output_path + '/' + self.revised_file, names=self.header_columns)
         document_review = dataset[self.review_col_name]
         document_sent = dataset[self.sent_key_col_name]
 
