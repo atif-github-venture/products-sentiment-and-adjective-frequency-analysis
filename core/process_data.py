@@ -2,8 +2,8 @@ import datetime
 import nltk
 import pandas
 import matplotlib.pyplot as plt
-import utils
-from constants import Constants
+from core import utils
+from core.constants import Constants
 import metapy
 
 
@@ -12,7 +12,7 @@ class ProcessData:
     revised_file_sent = Constants.REVISED_FILE_NAME_SENT
     revised_file_adj = Constants.REVISED_FILE_NAME_ADJ
     collection_file = Constants.COLLECTION_FILE
-    agg_comment_per_prod_file = Constants.AGGREGATE_COMMENT_FILE
+    agg_reviews_per_prod_file = Constants.AGGREGATE_REVIEWS_FILE
     stop_word_file = Constants.STOP_WORD_FILE
     dataset = None
 
@@ -51,7 +51,7 @@ class ProcessData:
         for item in aggregated_reviews:
             for k, v in item.items():
                 str += u'{},{}\n'.format(k, v)
-        utils.write_to_file(self.base_resource_path, self.agg_comment_per_prod_file, str)
+        utils.write_to_file(self.base_resource_path, self.agg_reviews_per_prod_file, str)
 
     def generate_collection_corpus(self):
         '''

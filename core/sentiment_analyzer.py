@@ -4,9 +4,8 @@ import nltk
 import metapy
 import pandas
 from nltk.metrics import precision, recall, f_measure
-import utils
-
-from constants import Constants
+from core import utils
+from core.constants import Constants
 
 
 class SentimentAnalyzer:
@@ -79,10 +78,10 @@ class SentimentAnalyzer:
     def run_test(self):
 
         print('****************Testing: START**************')
-        c_name = ['text', 'sent']
+        c_name = [self.review_col_name, self.sent_key_col_name]
         dataframe = pandas.read_csv(self.base_resource_path + '/' + self.test_file, names=c_name)
         test_review_text = dataframe[c_name[0]]
-        test_sentiment = dataframe[c_name[0]]
+        test_sentiment = dataframe[c_name[1]]
         p_review = self.process_review(test_review_text[:1])
         doc_test = set(p_review[0])
         feat = {}
@@ -105,7 +104,7 @@ if __name__ == '__main__':
     sa = SentimentAnalyzer(header_columns, review_col_name, sent_key_col_name)
     sa.set_data()
     sa.train_naive_bayes_classifier()
-    # sa.run_test() #To run a test for above classifier uncomment below lines of code.
+    sa.run_test() #To run a test for above classifier uncomment below lines of code.
 
     en_time = datetime.datetime.now()
     print('Total execution time (milliseconds): ' + str((en_time - st_time).total_seconds() * 1000))
