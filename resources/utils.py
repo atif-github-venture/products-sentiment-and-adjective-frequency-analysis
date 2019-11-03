@@ -79,5 +79,12 @@ def write_to_json(path, filename, content):
     fp.close()
 
 
+def read_json_file(path, filename):
+    with open(path + '/' + filename) as json_file:
+        data = json.load(json_file)
+    json_file.close()
+    return data
+
+
 def transform_with_space(list_a):
     return ' '.join(list_a)
