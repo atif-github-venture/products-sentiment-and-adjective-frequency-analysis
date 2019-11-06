@@ -144,6 +144,7 @@ class ProcessData:
         self.dataset[self.sentiment_col_name] = self.dataset[self.sentiment_col_name].replace('Neutral', 'Negative')
         utils.save_dataset_to_csv(self.dataset, self.output_path, self.revised_file_adj)
         utils.show_plots(self.dataset, 'Greens_r', self.sentiment_col_name)
+        utils.ensure_dir(Constants.OUTPUT_PATH)
 
     def balance_original_data(self):
         '''

@@ -5,6 +5,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import json
 import nltk
+import os
 
 
 def save_dataset_to_csv(dataset, path, filename):
@@ -88,3 +89,9 @@ def read_json_file(path, filename):
 
 def transform_with_space(list_a):
     return ' '.join(list_a)
+
+
+def ensure_dir(file_path):
+    directory = os.path.dirname(file_path)
+    if not os.path.exists(directory):
+        os.makedirs(directory)

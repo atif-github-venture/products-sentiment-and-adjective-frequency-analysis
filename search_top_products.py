@@ -1,6 +1,8 @@
 import datetime
-
 import metapy
+# from resources.constants import Constants
+from resources.constants import Constants
+import pandas
 
 
 def main():
@@ -8,12 +10,16 @@ def main():
     print(idx.num_docs())
     ranker = metapy.index.OkapiBM25()
     query = metapy.index.Document()
-    query.content('great')
-    top_docs = ranker.score(idx, query, num_results=5)
-    print(top_docs)
-    for num, (d_id, _) in enumerate(top_docs):
-        print(d_id)
-        print(idx.metadata(d_id).get('content'))
+    column = ['adjective', 'freq', 'sentiment']
+    df = pandas.read_csv(Constants.OUTPUT_PATH + '/' + Constants.TOP_POS_NEG_ADJ, names=column)
+
+    for ind, row in df.iterrows():
+        query.content(row['sentiment'])
+        top_docs = ranker.score(idx, query, num_results=5)
+        print(top_docs)
+        for num, (d_id, _) in enumerate(top_docs):
+            print(idx.metadata(d_id).get('content'))
+            print('*****************')
 
 
 if __name__ == '__main__':
