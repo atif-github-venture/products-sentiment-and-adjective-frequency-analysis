@@ -85,7 +85,7 @@ class ProcessData:
         df = pandas.DataFrame(all_words.most_common())
         df.columns = ['Word', 'Freq']
         print(df)
-        ax = df.plot(legend=True, title='Word frequency distribution')
+        ax = df.plot(legend=True, title='Word frequency distribution (Zipf\'s law)')
         ax.set_xlabel('Words', fontsize=12)
         ax.set_ylabel('Frequency', fontsize=12)
         plt.show()

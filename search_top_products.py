@@ -1,8 +1,9 @@
 import datetime
 import metapy
-# from resources.constants import Constants
-from resources.constants import Constants
+
 import pandas
+
+from resources.constants import Constants
 
 
 def main():
@@ -14,12 +15,14 @@ def main():
     df = pandas.read_csv(Constants.OUTPUT_PATH + '/' + Constants.TOP_POS_NEG_ADJ, names=column)
 
     for ind, row in df.iterrows():
-        query.content(row['sentiment'])
+        q = row['adjective']
+        print('Query -> '+ q)
+        query.content(q)
         top_docs = ranker.score(idx, query, num_results=5)
         print(top_docs)
         for num, (d_id, _) in enumerate(top_docs):
             print(idx.metadata(d_id).get('content'))
-            print('*****************')
+        print('*****************')
 
 
 if __name__ == '__main__':
