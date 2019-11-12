@@ -157,7 +157,6 @@ if __name__ == '__main__':
     ac.header_columns = ['word', 'frequency']
     ac.top = 5
     ac.classify_adjectives_collection()
-    # TODO https://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/
 
     en_time = datetime.datetime.now()
     print('Total execution time (milliseconds): ' + str((en_time - st_time).total_seconds() * 1000))

@@ -1,6 +1,5 @@
 import datetime
 import metapy
-
 import pandas
 
 from resources.constants import Constants
@@ -16,7 +15,7 @@ def main():
 
     for ind, row in df.iterrows():
         q = row['adjective']
-        print('Query -> '+ q)
+        print('Query -> ' + q)
         query.content(q)
         top_docs = ranker.score(idx, query, num_results=5)
         print(top_docs)
